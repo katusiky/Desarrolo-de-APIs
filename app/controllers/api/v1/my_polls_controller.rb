@@ -3,6 +3,7 @@ class Api::V1::MyPollsController < ApplicationController
 	before_action :authenticate, only: [:create, :update, :destroy]
 	before_action :set_poll, only: [:show, :update, :destroy]
 	before_action(only: [:update, :destroy]) { |controlador| controlador.authenticate_owner(@poll.user) }
+
 	def index
 		@polls = MyPoll.all
 	end
@@ -26,15 +27,7 @@ class Api::V1::MyPollsController < ApplicationController
 
 	def destroy
 		@poll.destroy
-		render "api/v1/my_polls/show"
-	end
-
-	protected
-
-	def authenticate_owner(owner)
-		if owner != @current_user
-			render json: { errors: "No estas autorizado para ejecutar ésta acción" }, status: :unauthorized
-		end
+		head :ok
 	end
 
 	private 

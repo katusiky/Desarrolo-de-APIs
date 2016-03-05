@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :user do
-    email "josedeleon.ka@gmail.com"
+    email "josedeleon.kaasdsa@gmail.com"
     name "José"
     provider "github"
     uid "asd2as4dasdas544"
     factory :bad_user do
-	    email "alberto.k@gmail.com"
+	    email "alberto.ksadasdas@gmail.com"
 	    name "alberto"
 	    provider "facebook"
 	    uid "asd2as4dasdas544"

@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
 
   it "debería crear un usuario si el uid y el provider no existen" do
   	expect{
-  		User.from_omniauth({uid: '12345', provider: 'facebook', info: {email: 'jose@gmail.com'}})
+  		User.from_omniauth({uid: '123456', provider: 'facebookk', info: {email: 'josee@gmail.com'}})
   	}.to change(User, :count).by(1)
   end
 

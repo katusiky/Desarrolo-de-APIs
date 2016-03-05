@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302191738) do
+ActiveRecord::Schema.define(version: 20160305033133) do
+
+  create_table "answers", force: :cascade do |t|
+    t.integer  "question_id"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "answers", ["question_id"], name: "index_answers_on_question_id"
 
   create_table "my_polls", force: :cascade do |t|
     t.integer  "user_id"
@@ -23,6 +32,15 @@ ActiveRecord::Schema.define(version: 20160302191738) do
   end
 
   add_index "my_polls", ["user_id"], name: "index_my_polls_on_user_id"
+
+  create_table "questions", force: :cascade do |t|
+    t.integer  "my_poll_id"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "questions", ["my_poll_id"], name: "index_questions_on_my_poll_id"
 
   create_table "tokens", force: :cascade do |t|
     t.datetime "expires_at"
