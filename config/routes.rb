@@ -6,7 +6,9 @@ Rails.application.routes.draw do
 	    resources :polls, controller: 'my_polls', except: [:new, :edit] do
 	    	resources :questions, except: [:new, :edit]
 	    	resources :answers, only: [:update, :destroy, :create]
+				match "*unmatched", via: [:options], to: 'master_api#_xhr_options_Qrequest'
 	    end
 	  end
 	end
+
 end
