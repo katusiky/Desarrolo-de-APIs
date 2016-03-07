@@ -1,3 +1,1 @@
-json.(@user,:id,:name,:email)
-
-json.(@token,:token)
+json.partial! "api/v1/resource", resource: @user

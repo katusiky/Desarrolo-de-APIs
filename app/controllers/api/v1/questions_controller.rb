@@ -1,9 +1,9 @@
-class Api::V1::QuestionsController < ApplicationController
+class Api::V1::QuestionsController < Api::V1::MasterApiController
 	before_action :authenticate, except: [:index, :show]
 	before_action :set_poll
 	before_action :set_question, except: [:index, :create]
 	before_action(only: [:update, :destroy, :create]) { |controlador| controlador.authenticate_owner(@poll.user) }
-	
+
 	def index
 		@questions = @poll.questions
 	end

@@ -10,7 +10,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 		it { expect(response).to have_http_status(200) }
 		it 'mande la lista de encuestas' do
 			json = JSON.parse(response.body)
-			expect(json.length).to eq(MyPoll.count)
+			expect(json["data"].length).to eq(MyPoll.count)
 		end
 	end
 
@@ -23,15 +23,15 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 		it { expect(response).to have_http_status(200) }
 		it 'mande la encuesta solicitada' do
 			json = JSON.parse(response.body)
-			expect(json['id']).to eq(@poll.id)
+			expect(json["data"]['id']).to eq(@poll.id)
 		end
 		it 'mande la encuesta del usuario solicitado' do
 			json = JSON.parse(response.body)
-			expect(json['user_id']).to eq(@poll.user_id)
+			expect(json['data']['attributes']['user_id']).to eq(@poll.user_id)
 		end
 		it "manda las claves correctas" do
 			json = JSON.parse(response.body)
-			expect(json.keys).to contain_exactly('id','title','description','expires_at','user_id')
+			expect(json['data']['attributes'].keys).to contain_exactly('id','title','description','expires_at','user_id',"created_at","updated_at")
 		end
 	end
 
@@ -50,7 +50,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			end
 			it "responde con la encuesta creada" do
 				json = JSON.parse(response.body)
-				expect(json["title"]).to eq("Hola Mundo")
+				expect(json['data']['attributes']["title"]).to eq("Hola Mundo")
 			end
 		end
 
@@ -63,7 +63,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			it { expect(response).to have_http_status(401) }
 			it "responde con los errores al guardar la encuesta" do
 				json = JSON.parse(response.body)
-				expect(json["error"]).to_not be_empty
+				expect(json["errors"]).to_not be_empty
 			end
 		end
 
@@ -94,7 +94,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			it { expect(response).to have_http_status(200) }
 			it "actualizar la encuenta" do
 				json = JSON.parse(response.body)
-				expect(json["title"]).to eq("Nuevo Titulo")
+				expect(json['data']['attributes']["title"]).to eq("Nuevo Titulo")
 			end
 			#it "retornar con la encuesta actualizada"
 		end

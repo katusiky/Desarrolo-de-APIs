@@ -15,13 +15,13 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
 		it { expect(response).to have_http_status(200) }
 		it 'mande la lista de preguntas para la encuesta' do
 			json = JSON.parse(response.body)
-			expect(json.length).to eq(@poll.questions.count)
+			expect(json['data'].length).to eq(@poll.questions.count)
 		end
 
 		it "manda la descipcion y id" do
 			json_array = JSON.parse(response.body)
-			question = json_array[0]
-			expect(question.keys).to contain_exactly('id','description')
+			question = json_array['data'][0]
+			expect(question['attributes'].keys).to contain_exactly('id','description',"created_at","updated_at","my_poll_id")
 		end
 	end
 
@@ -44,7 +44,7 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
 
 			it "responde con la pregunta creada" do
 				json = JSON.parse(response.body)
-				expect(json["description"]).to eq("¿te gusta el curso de apis?")
+				expect(json['data']['attributes']["description"]).to eq("¿te gusta el curso de apis?")
 			end
 		end
 
@@ -78,8 +78,8 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
 
 		it "retorne la pregunta solicitada" do
 			json = JSON.parse(response.body)
-			expect(json["description"]).to eq(@question.description)
-			expect(json["id"]).to eq(@question.id)
+			expect(json['data']['attributes']["description"]).to eq(@question.description)
+			expect(json['data']["id"]).to eq(@question.id)
 		end
 	end
 
@@ -95,7 +95,7 @@ RSpec.describe Api::V1::QuestionsController, type: :request do
 
 		it 'actualiza la pregunta' do 
 			json = JSON.parse(response.body)
-			expect(json["description"]).to eq('¿te gusta el curso?')
+			expect(json['data']['attributes']["description"]).to eq('¿te gusta el curso?')
 		end
 	end
 

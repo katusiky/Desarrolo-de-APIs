@@ -1,5 +1,6 @@
-class Api::V1::UsersController < ApplicationController
+class Api::V1::UsersController < Api::V1::MasterApiController
 	# POST /users
+
 	def create
 
 		if !params[:auth]
