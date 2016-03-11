@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311195451) do
+ActiveRecord::Schema.define(version: 20160311224910) do
 
   create_table "answers", force: :cascade do |t|
     t.integer  "question_id"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 20160311195451) do
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id"
+
+  create_table "my_answers", force: :cascade do |t|
+    t.integer  "user_poll_id"
+    t.integer  "answer_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "question_id"
+  end
+
+  add_index "my_answers", ["answer_id"], name: "index_my_answers_on_answer_id"
+  add_index "my_answers", ["question_id"], name: "index_my_answers_on_question_id"
+  add_index "my_answers", ["user_poll_id"], name: "index_my_answers_on_user_poll_id"
 
   create_table "my_apps", force: :cascade do |t|
     t.integer  "user_id"
@@ -65,6 +77,16 @@ ActiveRecord::Schema.define(version: 20160311195451) do
 
   add_index "tokens", ["my_app_id"], name: "index_tokens_on_my_app_id"
   add_index "tokens", ["user_id"], name: "index_tokens_on_user_id"
+
+  create_table "user_polls", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "my_poll_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_polls", ["my_poll_id"], name: "index_user_polls_on_my_poll_id"
+  add_index "user_polls", ["user_id"], name: "index_user_polls_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",      null: false

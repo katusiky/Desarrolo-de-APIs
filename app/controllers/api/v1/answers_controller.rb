@@ -10,7 +10,7 @@ class Api::V1::AnswersController < Api::V1::MasterApiController
 		if @answer.save
 			render "api/v1/answers/show"
 		else
-			render json: { errors: @answer.errors.full_messages }, status: :unprocessable_entity
+			error_array!( @answer.errors.full_messages, :unprocessable_entity)
 		end
 	end
 

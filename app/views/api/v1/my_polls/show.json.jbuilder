@@ -1,1 +1,1 @@
-json.partial! "api/v1/resource", resource: @poll
+json.partial! "api/v1/resource", resource: @poll, relations: ["questions", "user"]

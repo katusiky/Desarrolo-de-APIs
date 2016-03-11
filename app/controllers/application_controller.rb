@@ -11,8 +11,7 @@ class ApplicationController < ActionController::Base
   def authenticate
     token_str = params[:token]
     token = Token.find_by(token: token_str)
-    if token.nil? || !token.is_valid? || @my_app.is_your_token?(token)
-      #render json: { error: 'Invalid token'}, status: :unauthorized 
+    if token.nil? || !token.is_valid? || !@my_app.is_your_token?(token)
       error!('Tu token es inválido', :unauthorized)
     else
       @current_user = token.user
@@ -21,7 +20,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_owner(owner)
     if owner != @current_user
-      render json: { errors: "No estas autorizado para ejecutar ésta acción" }, status: :unauthorized
+      error!("No estas autorizado para ejecutar ésta acción", :unauthorized )
     end
   end
 

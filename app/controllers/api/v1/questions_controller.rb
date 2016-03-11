@@ -17,7 +17,7 @@ class Api::V1::QuestionsController < Api::V1::MasterApiController
 		if @question.save
 			render "api/v1/questions/show"
 		else
-			render json: { errors: @question.errors.full_messages }, status: :unprocessable_entity
+			error_array!( @question.errors.full_messages, :unprocessable_entity)
 		end
 	end
 
