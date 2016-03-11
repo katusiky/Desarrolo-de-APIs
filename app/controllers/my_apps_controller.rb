@@ -1,5 +1,6 @@
 class MyAppsController < ApplicationController
   before_action :set_my_app, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   # GET /my_apps/new
   def new

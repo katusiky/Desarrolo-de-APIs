@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::MyPollsController, type: :request do
+
+	let(:my_app){ FactoryGirl.create(:my_app, user: FactoryGirl.create(:sequence_user)) }
+
 	describe 'GET /polls' do
 		before :each do 
 			FactoryGirl.create_list(:my_poll, 10)
-			get '/api/v1/polls'
+			get '/api/v1/polls', { secret_key: my_app.secret_key }
 		end
 		
 		it { expect(response).to have_http_status(200) }
@@ -17,7 +20,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 	describe 'GET /polls/:id' do
 		before :each do 
 			@poll = FactoryGirl.create(:my_poll)
-			get "/api/v1/polls/#{@poll.id}"
+			get "/api/v1/polls/#{@poll.id}", { secret_key: my_app.secret_key }
 		end
 
 		it { expect(response).to have_http_status(200) }
@@ -39,13 +42,13 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 		context 'con token válido' do
 			before :each do 
 				@token = FactoryGirl.create(:token, expires_at: DateTime.now + 10.minutes)
-				post "/api/v1/polls", {token: @token.token, title: "Hola Mundo", description: "asdasd asd asdasd asdasdas", expires_at: DateTime.now}
+				post "/api/v1/polls", {token: @token.token, secret_key: my_app.secret_key, title: "Hola Mundo", description: "asdasd asd asdasd asdasdas", expires_at: DateTime.now}
 			end
 
 			it { expect(response).to have_http_status(200) }
 			it 'crea una nueva encuesta' do
 				expect{
-					post "/api/v1/polls", {token: @token.token, title: "Hola Mundo", description: "asdasd asd asdasd asdasdas", expires_at: DateTime.now}
+					post "/api/v1/polls", {token: @token.token, secret_key: my_app.secret_key, title: "Holadsad Mundo", description: "asdasd assadd asdasd asdasdas", expires_at: DateTime.now}
 					}.to change(MyPoll,:count).by(1)
 			end
 			it "responde con la encuesta creada" do
@@ -57,7 +60,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 
 		context 'con token inválido' do
 			before :each do
-				post "/api/v1/polls"
+				post "/api/v1/polls", {secret_key: my_app.secret_key}
 			end
 
 			it { expect(response).to have_http_status(401) }
@@ -71,7 +74,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			before :each do 
 				@token = FactoryGirl.create(:token, expires_at: DateTime.now + 10.minutes)
 				post "/api/v1/polls", {token: @token.token, title: "Hola Mundo",
-															 expires_at: DateTime.now}
+															 expires_at: DateTime.now, secret_key: my_app.secret_key}
 			end
 
 			it { expect(response).to have_http_status(422) }
@@ -88,7 +91,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			before :each do 
 				@token = FactoryGirl.create(:token, expires_at: DateTime.now + 10.minutes)
 				@poll = FactoryGirl.create(:my_poll, user: @token.user)
-				patch api_v1_poll_path(@poll), {token: @token.token, title: "Nuevo Titulo" }
+				patch api_v1_poll_path(@poll), {token: @token.token, secret_key: my_app.secret_key, title: "Nuevo Titulo" }
 			end
 
 			it { expect(response).to have_http_status(200) }
@@ -103,7 +106,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			before :each do 
 				@token = FactoryGirl.create(:token, expires_at: DateTime.now + 10.minutes)
 				@poll = FactoryGirl.create(:my_poll, user: FactoryGirl.create(:bad_user))
-				patch api_v1_poll_path(@poll), {token: @token.token, title: "Nuevo Titulo" }
+				patch api_v1_poll_path(@poll), {token: @token.token, secret_key: my_app.secret_key, title: "Nuevo Titulo" }
 			end
 
 			it { expect(response).to have_http_status(401) }
@@ -118,13 +121,13 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			end
 
 			it 'esperando que se elimine la encuesta' do 
-				delete api_v1_poll_path(@poll), {token: @token.token}
+				delete api_v1_poll_path(@poll), {token: @token.token, secret_key: my_app.secret_key}
 				expect(response).to have_http_status(200) 
 			end
 
 			it "eliminar la encuenta" do
 				expect{
-					delete api_v1_poll_path(@poll), {token: @token.token}
+					delete api_v1_poll_path(@poll), {token: @token.token, secret_key: my_app.secret_key}
 					}.to change(MyPoll,:count).by(-1)
 			end
 		end
@@ -136,7 +139,7 @@ RSpec.describe Api::V1::MyPollsController, type: :request do
 			end
 
 			it "esperando que no me deje borrar" do 
-				delete api_v1_poll_path(@poll), {token: @token.token}
+				delete api_v1_poll_path(@poll), {token: @token.token, secret_key: my_app.secret_key}
 				expect(response).to have_http_status(401) 
 			end
 		end

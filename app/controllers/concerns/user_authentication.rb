@@ -8,4 +8,8 @@ module UserAuthentication
 	def current_user
 		User.where(id: session[:user_id]).first
 	end
+
+	def authenticate_user!
+		redirect_to("/", notice: "Debes iniciar sesión") unless user_signed_in?
+	end
 end

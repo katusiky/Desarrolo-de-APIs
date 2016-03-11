@@ -30,8 +30,12 @@ RSpec.describe MyAppsController, type: :controller do
   let(:my_app){ FactoryGirl.create(:my_app)}
 
   let(:invalid_attributes) {
-    {  }
+    { title: "" }
   }
+
+  before :each do
+    request.session[:user_id] = my_app.user.id
+  end
 
   describe "GET #new" do
     it "assigns a new my_app as @my_app" do
@@ -63,7 +67,7 @@ RSpec.describe MyAppsController, type: :controller do
 
       it "redirects to the created my_app" do
         post :create, {:my_app => valid_attributes}
-        expect(response).to redirect_to(MyApp.last)
+        expect(response).to redirect_to("/")
       end
     end
 
@@ -83,13 +87,13 @@ RSpec.describe MyAppsController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { title: "update title" }
       }
 
       it "updates the requested my_app" do
         get :update, {:id => my_app.to_param, :my_app => new_attributes}
         my_app.reload
-        skip("Add assertions for updated state")
+        expect(my_app.title).to eq("update title")
       end
 
       it "assigns the requested my_app as @my_app" do
@@ -99,7 +103,7 @@ RSpec.describe MyAppsController, type: :controller do
 
       it "redirects to the my_app" do
         put :update, {:id => my_app.to_param, :my_app => valid_attributes}
-        expect(response).to redirect_to(my_app)
+        expect(response).to redirect_to("/")
       end
     end
 
@@ -125,7 +129,7 @@ RSpec.describe MyAppsController, type: :controller do
 
     it "redirects to the my_apps list" do
       delete :destroy, {:id => my_app.to_param}
-      expect(response).to redirect_to(my_apps_url)
+      expect(response).to redirect_to("/")
     end
   end
 

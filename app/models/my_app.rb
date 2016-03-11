@@ -13,6 +13,10 @@ class MyApp < ActiveRecord::Base
   	self.tokens.where(tokens: { id: token.id }).any?
   end
 
+  def is_valid_origin? domain
+    self.javascript_origins.split(",").include?(domain)
+  end
+
   private
 
   def generate_app_id

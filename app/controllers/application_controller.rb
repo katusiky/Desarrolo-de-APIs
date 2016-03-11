@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   def authenticate
     token_str = params[:token]
     token = Token.find_by(token: token_str)
-    if token.nil? || !token.is_valid?
+    if token.nil? || !token.is_valid? || @my_app.is_your_token?(token)
       #render json: { error: 'Invalid token'}, status: :unauthorized 
       error!('Tu token es inválido', :unauthorized)
     else

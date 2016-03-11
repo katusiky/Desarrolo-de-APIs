@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+	
+	get "/" => "welcome#app", constraints: lambda { |request| !request.session[:user_id].blank? }
+
 	get "/" => "welcome#index"
 
   resources :my_apps, except: [:show, :index]
