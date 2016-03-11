@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160305033133) do
+ActiveRecord::Schema.define(version: 20160311195451) do
 
   create_table "answers", force: :cascade do |t|
     t.integer  "question_id"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 20160305033133) do
   end
 
   add_index "answers", ["question_id"], name: "index_answers_on_question_id"
+
+  create_table "my_apps", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.string   "app_id"
+    t.string   "javascript_origins"
+    t.string   "secret_key"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  add_index "my_apps", ["user_id"], name: "index_my_apps_on_user_id"
 
   create_table "my_polls", force: :cascade do |t|
     t.integer  "user_id"
@@ -48,8 +60,10 @@ ActiveRecord::Schema.define(version: 20160305033133) do
     t.string   "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "my_app_id"
   end
 
+  add_index "tokens", ["my_app_id"], name: "index_tokens_on_my_app_id"
   add_index "tokens", ["user_id"], name: "index_tokens_on_user_id"
 
   create_table "users", force: :cascade do |t|

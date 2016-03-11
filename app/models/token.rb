@@ -1,5 +1,6 @@
 class Token < ActiveRecord::Base
   belongs_to :user
+  belongs_to :my_app
 
   before_create :generate_token
 

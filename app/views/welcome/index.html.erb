@@ -1,0 +1,12 @@
+<% if user_signed_in? %>
+	<h1>Bienvenido <%= current_user.email %></h1>
+	<p>
+		<%= link_to "Cerrar Session", "/logout", method: :delete%>
+	</p>
+<% else %>
+	<h1>Bienvenido Developer</h1>
+
+	<p>
+		<%= link_to "Haz click aquí", "/auth/google_oauth2/" %> Para iniciar sesión con tu cuenta de Google.
+	</p>
+<% end %>

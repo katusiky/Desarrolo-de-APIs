@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 	has_many :tokens
 	has_many :my_polls
+	has_many :my_apps
 
 	validates :email, presence: true, email: true, uniqueness: true
 	validates :uid, presence: true
