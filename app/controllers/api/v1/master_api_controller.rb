@@ -1,4 +1,5 @@
 class Api::V1::MasterApiController < ApplicationController
+	before_action :authenticate
 	layout "api/v1/application"
 
 	before_action :cors_set_access_control_headers

@@ -1,6 +1,10 @@
 class Api::V1::UsersController < Api::V1::MasterApiController
 	# POST /users
 
+	def show
+		@user = User.find(params[:id])
+	end
+
 	def create
 
 		if !params[:auth]
